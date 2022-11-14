@@ -1,17 +1,22 @@
 import numpy as np
 import cv2
 import math
-#import easygui
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 import unicodedata
 from matplotlib import pyplot as plt
 
 
 def img_path_read():
-    uni_code = easygui.fileopenbox(msg="Choose a file to open", default=r"/Users/idamaruotto/Downloads/Mammotest/")
-    img_path = unicodedata.normalize('NFKD', uni_code).encode('ascii', 'ignore')
+    Tk().withdraw()
+    img_path = askopenfilename(message="Choose a file to open", initialdir=r"/Users/idamaruotto/Downloads/Segmentaziones/dataset/train/")
+    #print(img_path)
+    #uni_code = easygui.fileopenbox(msg="Choose a file to open",
+    #                               default=r"/Users/idamaruotto/Downloads/Segmentaziones/dataset/train/")
+    img_path = unicodedata.normalize('NFKD', img_path).encode('ascii', 'ignore')
     img_path = img_path.decode('utf-8')
+    #img_path = "/Users/idamaruotto/Downloads/Segmentaziones/dataset/train/00001_p0_patch0.tif"
     return img_path
-
 
 # ##################### IMAGE SHOW ############################
 def show_img(array, name='Image'):

@@ -4,7 +4,7 @@ import unicodedata
 import numpy as np
 import pydicom as pdcm
 import cv2
-from image import normalize, show_no_wait_img, two_histograms
+from image import normalize, show_no_wait_img, two_histograms, img_path_read
 import matplotlib.pyplot as plt
 
 clip_limit_slider_max = 10
@@ -27,14 +27,6 @@ def on_trackbar(val):
     sub[1].hist(cl1.ravel(), np.max(cl1), [0, np.max(cl1)])
     plt.draw()
     fig.canvas.flush_events()
-
-
-def img_path_read():
-    uni_code = easygui.fileopenbox(msg="Choose a file to open", default=r"/Users/idamaruotto/Downloads/Mammotest/")
-    img_path = unicodedata.normalize('NFKD', uni_code).encode('ascii', 'ignore')
-    img_path = img_path.decode('utf-8')
-    return img_path
-
 
 def main():
     global src
