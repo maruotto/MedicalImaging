@@ -20,17 +20,18 @@ def img_path_read():
 
 # ##################### IMAGE SHOW ############################
 def show_img(array, name='Image'):
-    cv2.namedWindow(name)
+    cv2.namedWindow(name,cv2.WINDOW_NORMAL)
     cv2.imshow(name, array)
-    # cv2.resizeWindow(name, 800, 800)
+    #cv2.resizeWindow(name, 800, 800)
     cv2.waitKey()
     cv2.destroyWindow(name)
 
 
 def show_no_wait_img(array, name='Image'):
-    cv2.namedWindow(name)
+    cv2.namedWindow(name,cv2.WINDOW_NORMAL)
+    #cv2.resizeWindow(name, 400, 400)
     cv2.imshow(name, array)
-    # cv2.resizeWindow(name, 800, 800)
+
 
 
 # ##################### NORMALIZATION ############################
