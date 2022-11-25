@@ -82,7 +82,7 @@ def gamma_transform(gamma, max_value=255):
 
 
 def sub_histogram(subfigure, image, title=""):
-    """create an histogram of the image in the figure
+    """create a histogram of the image in the figure
         It uses matplotlib
         It requires a next call to matplotlib.pyplot.show() to produce effects"""
     subfigure.hist(image.ravel(), np.max(image), [0, np.max(image)])
@@ -90,7 +90,7 @@ def sub_histogram(subfigure, image, title=""):
 
 
 def histogram(image):
-    """create an histogram of the image in a new figure
+    """create a histogram of the image in a new figure
         It uses matplotlib
         It requires a next call to matplotlib.pyplot.show() to produce effects"""
     plt.hist(image.ravel(), np.max(image), [0, np.max(image)])
