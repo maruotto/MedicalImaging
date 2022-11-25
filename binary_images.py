@@ -1,80 +1,10 @@
-import easygui
-from image import normalize, show_img
-import unicodedata
-from tkinter import Tk as tk
-from tkinter.filedialog import askopenfilename
-from image import show_img, show_no_wait_img
+
+from image import show_img, show_no_wait_img, img_path_read
+from binary_img_lib import contour_bounding_box, calculate_area_thresh, contour_of_not_borders, ratio_borders
 import cv2
 
 MINIMUM_AREA = 500
 
-
-def img_path_read():
-    tk().withdraw()
-    img_path = askopenfilename(message="Choose a file to open", initialdir=r"/Users/idamaruotto/Downloads/Mammotest")
-    print(img_path)
-    #uni_code = easygui.fileopenbox(msg="Choose a file to open",
-    #                               default=r"/Users/idamaruotto/Downloads/Mammotest")
-    img_path = unicodedata.normalize('NFKD', img_path).encode('ascii', 'ignore')
-    img_path = img_path.decode('utf-8')
-    #img_path = "/Users/idamaruotto/Downloads/Segmentaziones/dataset/train/00001_p0_patch0.tif"
-    return img_path
-
-
-def calculate_area_thresh(contours, minimum_area=0):
-    """For each contour calculates the area
-    :returns the list of contours that enclose an area bigger than minimum_area"""
-
-    contours_new = []
-    for contour in contours:
-        tmp_area = cv2.contourArea(contour)
-        if tmp_area>minimum_area:
-            contours_new += [contour,]
-    return contours_new
-
-
-def contour_of_not_borders(contours, maxH, maxW):
-    """Check if the contours touch the borders
-        :returns the list of contours that do not have any of the contour point on an edge"""
-
-    maxH -= 1
-    maxW -= 1
-    contours_new = []
-    for contour in contours:
-        flag = True
-        for points in contour:
-            point = points[0]
-            if point[0] == 0 or point[1] == 0 or point[0] == maxH or point[1] == maxW:
-                flag = False
-                break
-        if flag:
-            contours_new += [contour, ]
-    return contours_new
-
-
-def contour_bounding_box(contours, maxH, maxW):
-    """For each contour calculates the bounding box (parallel to axes)
-        :returns the list of contours which the corresponding bounding
-        box does not have any side overlapping to a side of the image"""
-
-    contours_new = []
-    for contour in contours:
-        x,y,width, height = cv2.boundingRect(contour)
-        if not(x == 0 or y == 0 or x+width == maxW or y+height == maxH):
-            contours_new += [contour, ]
-    return contours_new
-
-
-def ratio_borders(contours, thresh):
-    """For each contour calculates the ratio of the bounding box to separate elongated or double
-        cells from others
-        :returns the list of contours which the corresponding bounding """
-    contours_new = []
-    for contour in contours:
-        center,(width,height),angle = cv2.minAreaRect(contour)
-        if (height/width>thresh or width/height>thresh):
-            contours_new += [contour, ]
-    return contours_new
 
 def main():
     img_path = "/Users/idamaruotto/Downloads/Mammotest/acanthocyte1.jpg" #img_path_read() #macos users - static path
