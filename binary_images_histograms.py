@@ -152,10 +152,16 @@ def main():
 
 
     ##Scatter plot
+    plt.figure(4)
+    plt.suptitle('Scatter plot')
+    plt.scatter(C,ratio)
 
 
 if __name__ == '__main__':
     main()
-    cv2.waitKey()
+    #cv2.waitKey()
+    plt.close(1)
+    plt.close(2)
+    plt.close(3)
     plt.show()
 
