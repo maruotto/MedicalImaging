@@ -1,7 +1,4 @@
 # MedicalImaging
 ## Libraries:
-
-``` 
-image.py
-binary_img_lib.py
-```
+- image.py
+- binary_img_lib.py
