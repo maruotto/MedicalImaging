@@ -3,4 +3,5 @@
 
 ``` 
 image.py
+binary_img_lib.py
 ```
