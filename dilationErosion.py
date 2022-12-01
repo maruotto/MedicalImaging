@@ -1,30 +1,25 @@
-import easygui
-from matplotlib import pyplot as plt
-
-from image import normalize, show_img
 import unicodedata
 from tkinter import Tk as tk
 from tkinter.filedialog import askopenfilename
 from image import show_img, show_no_wait_img
 import cv2
-import math
 import numpy as np
-from binary_img_lib import contour_bounding_box, calculate_area_thresh
-from sklearn.cluster import AgglomerativeClustering
-
-from image import histogram
 
 d_slider_max = 40
+MORPH = cv2.MORPH_OPEN #cv2.MORPH_CLOSE
+SHAPE = cv2.MORPH_RECT
+
 
 def on_trackbar(val):
     global image
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (val, val))
-    # Using cv2.erode() method
-    eroded = cv2.erode(image, kernel)
+    if val == 0:
+        return
+    kernel = cv2.getStructuringElement(SHAPE, (val, val))
+    # Closing image
+    closing = cv2.morphologyEx(image, MORPH, kernel)
 
     # Displaying the image
-    show_no_wait_img(two_images(image, eroded), 'Images')
-    cv2.waitKey()
+    show_img(two_images(image, closing), 'Images')
 
 
 def two_images(image1, image2, horizontal = True):
@@ -37,6 +32,7 @@ def two_images(image1, image2, horizontal = True):
     else: np.vstack((image1, image2)) #np.concatenate((image1, image2), axis=0)
 
     return stack
+
 
 def img_path_read():
     tk().withdraw()
@@ -58,12 +54,12 @@ def main():
     cv2.createTrackbar('Circle of diameter', "Images", 1, d_slider_max, on_trackbar)
 
     # create kernel
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (1, 1))
-    # Using cv2.erode() method
-    eroded = cv2.erode(image, kernel)
+    kernel = cv2.getStructuringElement(SHAPE, (1, 1))
+    # Using cv2.erode() method eroded = cv2.erode(image, kernel)
+    closing = cv2.morphologyEx(image, MORPH, kernel)
 
     # Displaying the image
-    show_no_wait_img(two_images(image, eroded), 'Images')
+    show_no_wait_img(two_images(image, closing), 'Images')
 
 
 if __name__ == '__main__':
