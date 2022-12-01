@@ -7,7 +7,7 @@ import numpy as np
 
 d_slider_max = 40
 MORPH = cv2.MORPH_OPEN #cv2.MORPH_CLOSE
-SHAPE = cv2.MORPH_RECT
+SHAPE = cv2.MORPH_RECT #cv2.MORPH_ELLIPSE
 
 
 def on_trackbar(val):
