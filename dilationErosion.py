@@ -22,7 +22,7 @@ def on_trackbar(val):
     show_img(two_images(image, closing), 'Images')
 
 
-def two_images(image1, image2, horizontal = True):
+def two_images(image1, image2, horizontal=True):
     """
     the two images must have the same shape
     returns an image that can be shown with cv2.imshow()
