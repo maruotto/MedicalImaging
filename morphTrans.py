@@ -31,7 +31,8 @@ def evaluate_seed(dim, mask):
 def execute(m1, kernel, mask):
     m0 = m1.copy()
     m1 = cv2.dilate(m0, kernel)
-    m1 = np.where(m1 == mask,255,0)
+    #m1 = cv2.bitwise_and(m1, mask)
+    m1 = np.where(np.logical_and(m1 == mask, m1==255),255,0)
     return m1.astype(np.uint8)
 
 
@@ -45,33 +46,46 @@ def main():
     # opening to remove small elements
 
     # create kernel
-    #kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
     # Using cv2.erode() method eroded = cv2.erode(image, kernel)
-    #opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+    opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 
-    #show_no_wait_img(img, 'Before')
-    #show_no_wait_img(opening, 'Without small elements')
+    show_no_wait_img(img, 'Before')
+    show_no_wait_img(opening, 'Without small elements')
 
-    seed = evaluate_seed(img.shape[0], img)
+    seed = evaluate_seed(img.shape[0], opening)
     #print(mask)
 
     # reconstruct by dilation
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
 
-    m0 = img.copy()
-    m1 = execute(seed, kernel, img)
+    m0 = opening.copy()
+    m1 = execute(seed, kernel, opening)
     print(m1.dtype)
-    i = 0
+    i = 1
+    #show_img(m1, 'Iteration ' + str(i))
     while not np.array_equiv(m0, m1):
-        m0 = m1.copy()
-        m1 = execute(m1, kernel, img)
-        show_img(m1, 'After')
+        m0 = m1
+        m1 = execute(m1, kernel, opening)
+        #show_img(m1, 'Iteration '+ str(i))
         if i == 10000:
             exit(4)
         i += 1
     # Displaying the image
     print(i)
-    show_no_wait_img(m1, 'After')
+    show_no_wait_img(m1, 'Border bw cells')
+    result = opening - m1
+    show_no_wait_img(result, 'Inside bw')
+
+    zeros = np.zeros(image.shape, dtype = np.uint8)
+    binary_mask = (m1/255).astype(np.uint8)
+    zeros[:,:,0]= binary_mask
+    zeros[:, :, 1] = binary_mask
+    zeros[:, :, 2] = binary_mask
+    result_color = np.multiply(image,zeros)
+    result_color = image - result_color
+    show_no_wait_img(result_color, 'Result')
+
 
 
 if __name__ == '__main__':
